@@ -55,6 +55,7 @@ class MainActivity : Activity() {
         setContentView(root)
     }
 
+    @Suppress("DEPRECATION")
     private fun startRecording() {
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), 10); return
@@ -64,7 +65,7 @@ class MainActivity : Activity() {
             if (!dir.exists()) dir.mkdirs()
             val stamp = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault()).format(Date())
             recordingFile = File(dir, "recording_$stamp.m4a")
-            val r = if (Build.VERSION.SDK_INT >= 31) MediaRecorder(this) else @Suppress("DEPRECATION") MediaRecorder()
+            val r = if (Build.VERSION.SDK_INT >= 31) MediaRecorder(this) else MediaRecorder()
             r.setAudioSource(MediaRecorder.AudioSource.MIC)
             r.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             r.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
@@ -73,7 +74,7 @@ class MainActivity : Activity() {
             recorder = r
             recordButton.text = "עצירת הקלטה"
             status.text = "מקליט כעת…"
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             recorder?.release(); recorder = null
             recordingFile?.delete(); recordingFile = null
             status.text = "לא ניתן להתחיל הקלטה"
