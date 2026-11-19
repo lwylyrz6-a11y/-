@@ -31,7 +31,7 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         buildScreen()
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), 10)
+            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE), 10)
         }
         refreshRecordings()
     }
@@ -49,7 +49,7 @@ class MainActivity : Activity() {
             setOnClickListener { if (recorder == null) startRecording() else stopRecording() }
         }
         val note = TextView(this).apply {
-            text = "שימי לב: האפליקציה מקליטה דרך המיקרופון בלבד. Android עשוי לחסום הקלטת שיחת טלפון או לאפשר לשמוע רק צד אחד. אין הבטחה להקלטה אוטומטית או להקלטת שני הצדדים."
+            text = "האפליקציה מזהה ניסיון תחילת שיחה ומציגה חיווי הקלטה עם שעון. היא מנסה להקליט דרך המיקרופון בלבד. Android או יצרן המכשיר עלולים לחסום הקלטה בזמן שיחה או לאפשר לשמוע רק צד אחד. יש לבדוק בפועל; אין הבטחה להקלטת שני הצדדים."
             textSize = 14f
             setPadding(0, 18, 0, 18)
         }
