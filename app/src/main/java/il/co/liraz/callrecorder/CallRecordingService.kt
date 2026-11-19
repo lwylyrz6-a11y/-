@@ -89,7 +89,7 @@ class CallRecordingService : Service() {
     }
 
     private fun showOverlay() {
-        if (Build.VERSION.SDK_INT < 23 || !Settings.canDrawOverlays(this)) return
+        if (!Settings.canDrawOverlays(this)) return
         try {
             windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
             val view = TextView(this).apply {
@@ -101,12 +101,10 @@ class CallRecordingService : Service() {
                 setPadding(16, 12, 16, 12)
                 elevation = 12f
             }
-            val type = if (Build.VERSION.SDK_INT >= 26) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                       else @Suppress("DEPRECATION") WindowManager.LayoutParams.TYPE_PHONE
             val params = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                type,
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT
             ).apply {
@@ -124,9 +122,7 @@ class CallRecordingService : Service() {
 
     private fun removeOverlay() {
         handler.removeCallbacks(overlayTicker)
-        try {
-            overlay?.let { windowManager?.removeView(it) }
-        } catch (_: Exception) {}
+        try { overlay?.let { windowManager?.removeView(it) } } catch (_: Exception) {}
         overlay = null
         windowManager = null
     }
